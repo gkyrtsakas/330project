@@ -1,6 +1,6 @@
 package project;
 
-public class Header	{
+public class Process{
 	private int pid;
 	private int priority;
 	private int submitTime;
@@ -10,7 +10,7 @@ public class Header	{
 	private int sizeInRAM;
 	private boolean deviceRequest;
 	
-	public Header (int pid, int prio, int sub, int size, boolean devReq){
+	public Process (int pid, int prio, int sub, int size, boolean devReq){
 		this.pid = pid;
 		this.priority = prio;
 		this.submitTime = sub;
