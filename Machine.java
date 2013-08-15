@@ -1,8 +1,6 @@
-package project;
-
 public class Machine {
 	private int[] regs;
-	private long maxRAM = 3435973868; 	// 4GB RAM in bits
+	private long maxRAM = 3435973868L; 	// 4GB RAM in bits
 	private int pageSize = 65535;		// 8KB page size
 	private long clock;
 	

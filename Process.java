@@ -1,5 +1,3 @@
-package project;
-
 public class Process{
 	private int pid;
 	private int priority;
@@ -34,6 +32,10 @@ public class Process{
 		return waitTime;
 	}
 	
+	public int getCPUtime(){
+		return cpuTime;
+	}
+	
 	public int getCompleteTime (){
 		return completeTime;
 	}
@@ -47,7 +49,7 @@ public class Process{
 	}
 	
 	public void incCPU(){
-		this.cpuTime++
+		this.cpuTime++;
 	}
 	
 	

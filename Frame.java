@@ -1,5 +1,3 @@
-package project;
-
 public class Frame {
 	private String someData;
 	

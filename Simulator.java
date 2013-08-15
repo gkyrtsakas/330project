@@ -1,5 +1,3 @@
-package project;
-
 public class Simulator {
 
 	public void getStats (){
