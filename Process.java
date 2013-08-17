@@ -1,4 +1,4 @@
-package process.scheduler;
+package project;
 
 import java.util.ArrayList;
 import java.util.Vector;
@@ -26,6 +26,7 @@ public class Process implements Comparable<Process>, Cloneable{
 	private int order; // value to compare
 	private String state;
 	private double iorate;
+	private String schedule;
 	private static int maxPid = 1;
 	private boolean isPeriodic;
 
@@ -57,6 +58,11 @@ public class Process implements Comparable<Process>, Cloneable{
 	//Returns the current process id
 	public int getPid(){
 		return this.pid;
+	}
+	
+	//Returns the current process name
+	public String getName(){
+		return this.name;
 	}
 	
 	//Returns the current process priority
@@ -164,6 +170,16 @@ public class Process implements Comparable<Process>, Cloneable{
 		return this.state;
 	}
 	
+	//Returns the current schedule on the process
+	public String getSchedule(){
+		return this.schedule;
+	}
+	
+	//Sets a schedule on the current process
+	public void setSchedule(String schedule){
+		this.schedule = schedule;
+	}
+	
 	//Returns the unique process identifier
 	public static int getMaxPid() {
 		return maxPid;
@@ -198,6 +214,10 @@ public class Process implements Comparable<Process>, Cloneable{
 	//Returns True if the current process burst IO is current
 	public boolean isCurrentIO() {
 		return burstsCycle.get(getCurrentBurst()) == 1;
+	}
+	
+	public void accessCriticalSection(){
+		
 	}
 
 	public int compareTo(Process p) {
