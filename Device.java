@@ -95,6 +95,10 @@ public class Device {
 		return !locked;
 	}
 	
+	String getPortID(){
+		return this.portID;
+	}
+	
 	public static void main(String args[]){
 		Vector<Integer> x = new Vector<Integer>(1);
 		Process p1 = new Process(1, "The process", 2, 3, false, x);

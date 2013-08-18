@@ -21,7 +21,7 @@ public class Resource {
 		return resources;
 	}
 	
-	static Resource findDevice(String resourcePort){
+	static Resource findResource(String resourcePort){
 		int index = Integer.parseInt((resourcePort.split("-"))[1]);
 		if(index <= count){
 			return resources.get(index - 1);
@@ -90,6 +90,10 @@ public class Resource {
 	
 	boolean isAvailable(){
 		return !locked;
+	}
+	
+	String getPortID(){
+		return this.portID;
 	}
 	
 	public static void main(String args[]){
