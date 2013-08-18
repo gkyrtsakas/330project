@@ -98,26 +98,4 @@ public class Device {
 	String getPortID(){
 		return this.portID;
 	}
-	
-	public static void main(String args[]){
-		Vector<Integer> x = new Vector<Integer>(1);
-		Process p1 = new Process(1, "The process", 2, 3, false, x, "", "");
-		Process p2 = new Process(2, "The Thing", 3, 3, false, x, "", "");
-		Device d = new Device("Hi there I'mma device");
-		d.setLock(p1);
-		d = new Device("Hi there I'mma device2");
-		d = new Device("Hi there I'mma device3");
-		d.setLock(p2);
-		d = new Device("Hi there I'mma device4");
-		System.out.println(Device.getTableInfo());
-		d = Device.findDevice("D-3");
-		if(d != null){
-			System.out.println("D-3 found");
-		}
-		d = Device.findDevice("D-23");
-		if(d != null){
-			System.out.println("D-23 found");
-		}
-	}
-
 }

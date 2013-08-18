@@ -1,9 +1,7 @@
-package project;
-
 import java.util.ArrayList;
 import java.util.Vector;
 
-public class Process implements Comparable<Process>, Cloneable{
+public class Process{
 	
 	private static String PROCESS_STATE_NEW = "new";
 	private static String PROCESS_STATE_READY = "ready";
@@ -16,24 +14,14 @@ public class Process implements Comparable<Process>, Cloneable{
 	private String name;							//name of the current process
 	private int priority;							//the priority of the current process (higher value -> higher priority)
 	private int submitTime;
-	private Vector<Integer> burstsCycle;
+	private int burstCycles;
 	private String[] requiredDevices;				//list of devices required by the current process
 	private ArrayList<Device> usedDevices;			//list of accessed devices in the current process
 	private String[] requiredResources;				//list of resources required by the current process
 	private ArrayList<Resource> usedResources;		//list of accessed resources in the current process
-	private int waitTime;
-	private int cpuTime;
-	private int quantum;							//Quantum consumed
-	private int current;
-	private int completeTime;
-	private int responseTime;
-	private int order; 								//value to compare
 	private String state;							//current state of the current process
-	private double iorate;
-	private int schedule;							//current scheduling algorithm on the process
 	private static int maxPid = 1;
 	private boolean[] flag;
-	private boolean isPeriodic;
 
 	/** 
 	 * Constructs a process
@@ -45,18 +33,12 @@ public class Process implements Comparable<Process>, Cloneable{
 	 * @param periodic	true means endless process that repeats burst cycle indefinitely, otherwise	only once
 	 * @param burstsCycle process bursts vector. CPU or I/O bursts, values 0 or 1  
 	 */
-	public Process(int pid, String name, int priority, int submitTime, boolean periodic, Vector<Integer> burstsCycle, String requiredDevices, String requiredResources) {
+	public Process(int pid, String name, int priority, int submitTime, int burstsCycle, String requiredDevices, String requiredResources) {
 		this.pid = pid;
 		this.name = name;
 		this.priority = priority;
 		this.submitTime = submitTime;
-		this.isPeriodic = periodic;
-		this.burstsCycle = burstsCycle;
-		this.responseTime = -1;
-		int ioburst = 0;
-		for (int i=0; i < burstsCycle.size(); i++) ioburst += burstsCycle.get(i);
-		this.iorate = (double) ioburst / burstsCycle.size();
-		this.state = PROCESS_STATE_NEW;
+		this.burstCycles = burstsCycle;
 		this.requiredDevices = requiredDevices.split(" ");
 		this.requiredResources = requiredResources.split(" ");
 		maxPid++;
@@ -83,109 +65,17 @@ public class Process implements Comparable<Process>, Cloneable{
 		return this.submitTime;
 	}
 	
-	//Returns True if process is periodic, False otherwise
-	public boolean isPeriodic() {
-		return this.isPeriodic;
+	public int getBurstsCycle() {
+		return this.burstCycles;
 	}
 	
-	public Vector<Integer> getBurstsCycle() {
-		return this.burstsCycle;
-	}
-	
-	//Returns the process current execution moment
-	public int getCurrent() {
-		return this.current;
-	}
-	
-	//Returns current process burst moment
-	public int getCurrentBurst() {
-		if (this.isPeriodic) return this.current%this.burstsCycle.size();
-		else return this.current;
-	}
-	
-	//Increments the current process burst moment
-	public void incCurrent() {
-		this.current++;
-	}
-	
-	//Returns the current process waiting time
-	public int getWaitTime (){
-		return this.waitTime;
-	}
-	
-	//Increments the current waiting process time
-	public void incWait(){
-		this.waitTime++;
-	}
-	
-	//Returns the current process CPU time
-	public int getCPUtime(){
-		return this.cpuTime;
-	}
-	
-	//Increments the CPU time
-	public void incCPU(){
-		this.cpuTime++;
-	}
-	
-	//Returns the current process completion time
-	public int getCompleteTime (){
-		return this.completeTime;
-	}
-
-	//Sets the current process completion time
-	public void setCompleteTime (int time){
-		this.completeTime = time;
-	}
-	
-	//Returns the current process response time
-	public int getResponseTime() {
-		return this.responseTime;
-	}
-
-	//Sets the current process response time
-	public void setResponseTime(int responseTime) {
-		this.responseTime = responseTime;
-	}
-	
-	//Returns the current process quantum time
-	public int getQuantum() {
-		return this.quantum;
-	}
-
-	//Adds time to the current process quantum time
-	public void addQexecuted(int val) {
-		this.quantum += val;
-	}
-
-	//Sets time of the current process quantum time
-	public void setQexecuted(int quantum) {
-		this.quantum = quantum;
-	}
-	
-	//Returns the current process order
-	public int getOrder() {
-		return this.order;
-	}
-
-	//Sets the current process order
-	public void setOrder(int order) {
-		this.order = order;
+	public void setBurstCycle(int burst) {
+		this.burstCycles = burst;
 	}
 	
 	//Returns the current process state
 	public String getState(){
 		return this.state;
-	}
-	
-	//Returns the current schedule on the process
-	public int getSchedule(){
-		return this.schedule;
-	}
-	
-	//Sets a schedule on the current process
-	public void setSchedule(int schedule){
-		this.schedule = schedule;
 	}
 	
 	//Returns the unique process identifier
@@ -364,37 +254,6 @@ public class Process implements Comparable<Process>, Cloneable{
 		return ports;												//return the port ids
 	}
 	
-	/**
-	 * Gets current burst duration, from current burst moment to different burst or process end's.
-	 * When process burst cycle is periodic, current burst reaches process end's and first burst 
-	 * is the same as last one, it adds first burst duration. 
-	 * 
-	 * @return Gets current burst duration
-	 */
-	public int getCurrentBurstDuration() {
-		int cbduration = 0;
-		int cb = burstsCycle.get(getCurrentBurst());
-		int i = getCurrentBurst();
-		while (i < burstsCycle.size() && burstsCycle.get(i) == cb) {
-			cbduration++;
-			i++;
-		}
-		if (isPeriodic && i >= burstsCycle.size() && burstsCycle.get(0) == cb) {  
-			i = 0;
-			while (i < getCurrentBurst() && burstsCycle.get(i) == cb) {
-				cbduration++;
-				i++;
-			}
-		}
-		
-		return cbduration;
-	}
-	
-	//Returns True if the current process burst IO is current
-	public boolean isCurrentIO() {
-		return burstsCycle.get(getCurrentBurst()) == 1;
-	}
-	
 	//Access critical section of process
 	public void accessCriticalSection(){
 
@@ -414,22 +273,6 @@ public class Process implements Comparable<Process>, Cloneable{
 	    
 	    flag[pid] = false;
 		
-	}
-
-	public int compareTo(Process p) {
-		if (this.order == p.getOrder()) return this.pid - p.getPid();
-		else return this.order - p.getOrder();
-	}
-	
-	//Creates a copy of the current process
-	protected Process clone() {
-	    Process clone = null;
-		try {
-			clone = (Process) super.clone();
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-		}
-	    return clone;
 	}
 	
 	
