@@ -17,9 +17,9 @@ public class Process implements Comparable<Process>, Cloneable{
 	private int priority;							//the priority of the current process (higher value -> higher priority)
 	private int submitTime;
 	private Vector<Integer> burstsCycle;
-	private ArrayList<String> requiredDevices;
+	private String[] requiredDevices;				//list of devices required by the current process
 	private ArrayList<Device> usedDevices;			//list of accessed devices in the current process
-	private ArrayList<Resource> requiredResources;	//list of resources required by this process
+	private String[] requiredResources;				//list of resources required by the current process
 	private ArrayList<Resource> usedResources;		//list of accessed resources in the current process
 	private int waitTime;
 	private int cpuTime;
@@ -45,7 +45,7 @@ public class Process implements Comparable<Process>, Cloneable{
 	 * @param periodic	true means endless process that repeats burst cycle indefinitely, otherwise	only once
 	 * @param burstsCycle process bursts vector. CPU or I/O bursts, values 0 or 1  
 	 */
-	public Process(int pid, String name, int priority, int submitTime, boolean periodic, Vector<Integer> burstsCycle) {
+	public Process(int pid, String name, int priority, int submitTime, boolean periodic, Vector<Integer> burstsCycle, String requiredDevices, String requiredResources) {
 		this.pid = pid;
 		this.name = name;
 		this.priority = priority;
@@ -57,6 +57,8 @@ public class Process implements Comparable<Process>, Cloneable{
 		for (int i=0; i < burstsCycle.size(); i++) ioburst += burstsCycle.get(i);
 		this.iorate = (double) ioburst / burstsCycle.size();
 		this.state = PROCESS_STATE_NEW;
+		this.requiredDevices = requiredDevices.split(" ");
+		this.requiredResources = requiredResources.split(" ");
 		maxPid++;
 		flag = new boolean[pid];
 	}
@@ -191,10 +193,34 @@ public class Process implements Comparable<Process>, Cloneable{
 		return maxPid;
 	}
 	
+	//Determines if the passed device is required by this process
+	private boolean isDeviceRequired(Device device){
+		boolean found = false;
+		for(int i = 0; i < requiredDevices.length; i++){
+			if(Device.findDevice(requiredDevices[i]) != null){
+				found = true;
+				break;
+			}
+		}
+		return found;
+	}
+	
+	//Determines if the passed resource is required by this process
+	private boolean isResourceRequired(Resource resource){
+		boolean found = false;
+		for(int i = 0; i < requiredResources.length; i++){
+			if(Resource.findResource(requiredResources[i]) != null){
+				found = true;
+				break;
+			}
+		}
+		return found;
+	}
+	
 	//Adds a device that the current process may access
 	public void addDevice(String deviceName){
 		Device device = new Device(deviceName);						//create new device
-		if(device.isAvailable()){									//check availability
+		if(isDeviceRequired(device) && device.isAvailable()){		//check availability
 			usedDevices.add(device);								//add device to list
 			device.setLock(this);									//lock device
 		}
@@ -228,7 +254,7 @@ public class Process implements Comparable<Process>, Cloneable{
 	//Adds a resource that the current process may access
 	public void addResource(String resourceName){
 		Resource resource = new Resource(resourceName);				//create new resource
-		if(resource.isAvailable()){									//check availability
+		if(isResourceRequired(resource) && resource.isAvailable()){	//check availability
 			usedResources.add(resource);							//add device to list
 			resource.setLock(this);									//lock device
 		}
@@ -257,6 +283,18 @@ public class Process implements Comparable<Process>, Cloneable{
 	//Returns all resources accessed by this process as an arraylist
 	public ArrayList<Resource> getAllResource(){
 		return usedResources;
+	}
+	
+	//Returns used port ids from the current process
+	public String getUsedPorts(){
+		String ports = "";
+		for(Device dev : usedDevices){								//locate device in used devices
+			ports = ports + dev.getPortID() + ", ";
+		}
+		for(Resource res : usedResources){							//locate resource in used resources
+			ports = ports + res.getPortID() + ", ";
+		}
+		return ports;												//return the port ids
 	}
 	
 	/**
