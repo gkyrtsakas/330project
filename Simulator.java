@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class Simulator {
+public class Simulator implements Runnable {
 	//This class will be used to gather and print statistics for the simulation run
 	//as well as being the place where the simulation is actually run
 	//It will also compare two or more different scheduling algorithms
@@ -11,6 +11,13 @@ public class Simulator {
 	
 	
 	public static void main(String[] args) {
+		Thread t = new Thread(new Simulator());
+		t.start();
+	}
+
+
+
+	public void run() {
 		int response = 1;
 		
 		while (response > 0){
@@ -22,6 +29,7 @@ public class Simulator {
 			System.out.println("2. And here");
 			System.out.println("3. Derp");
 			
+			@SuppressWarnings("resource")
 			Scanner reader = new Scanner(System.in);
 			response=reader.nextInt();
 			
@@ -38,9 +46,14 @@ public class Simulator {
 			default:
 				break;
 			}
+			try {
+				Thread.sleep(1500);
+			} catch(InterruptedException ex) {
+			    Thread.currentThread().interrupt();
 			
+			}
 		}
-
+		
 	}
 
 	
