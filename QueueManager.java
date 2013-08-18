@@ -1,4 +1,3 @@
-import java.util.LinkedList; 
 import java.util.*; 
 
 public class QueueManager extends NonPreemptiveScheduler{
@@ -75,7 +74,7 @@ public class QueueManager extends NonPreemptiveScheduler{
 		String returnString = "Current Cycle Time: " + cycleTime,
 				newS, readyS, runS, waitS, termS;
 		
-		returnString = "|----New----|---Ready---|--Running--|-Waiting--|-Terminated-|";
+		returnString += "\n|----New----|---Ready---|--Running--|--Waiting--|-Terminated|";
 		int newSize = newQueue.size(), readySize = readyQueue.size(), 
 			runSize = runQueue.size(), waitSize = waitQueue.size(),
 			terminateSize = terminateQueue.size(), max;
@@ -84,9 +83,9 @@ public class QueueManager extends NonPreemptiveScheduler{
 		
 		max = Collections.max(findMax);
 		
-		Process[] newArray = (Process[])newQueue.toArray(), readyArray = (Process[])readyQueue.toArray(),
-				runArray = (Process[])runQueue.toArray(), waitArray = (Process[])waitQueue.toArray(),
-				terminateArray = (Process[])terminateQueue.toArray();
+		Process[] newArray = newQueue.toArray(new Process[newQueue.size()]), readyArray = readyQueue.toArray(new Process[readyQueue.size()]),
+				runArray = runQueue.toArray(new Process[runQueue.size()]), waitArray = waitQueue.toArray(new Process[waitQueue.size()]),
+				terminateArray = terminateQueue.toArray(new Process[terminateQueue.size()]);
 		
 		for(int i=0; i < max; i++){
 			if(i < newSize){
@@ -126,7 +125,7 @@ public class QueueManager extends NonPreemptiveScheduler{
 				waitS = "...........";
 			}
 			if(i < terminateSize){
-				termS = newArray[i].getName();
+				termS = terminateArray[i].getName();
 				for(int c = termS.length(); c < 11; c++){
 					termS += ".";
 				}
