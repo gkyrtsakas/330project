@@ -1,4 +1,4 @@
-
+package project;
 
 import java.util.ArrayList;
 import java.util.Vector;
@@ -12,21 +12,25 @@ public class Process implements Comparable<Process>, Cloneable{
 	private static String PROCESS_STATE_TERMINATED = "terminated";
 	
 	protected ArrayList<Process> childProcess = new ArrayList<Process>();
-	private int pid;
-	private String name;
-	private int priority;			//the priority of the current process (higher value -> higher priority)
+	private int pid;								//unique id of the current process
+	private String name;							//name of the current process
+	private int priority;							//the priority of the current process (higher value -> higher priority)
 	private int submitTime;
 	private Vector<Integer> burstsCycle;
+	private ArrayList<String> requiredDevices;
+	private ArrayList<Device> usedDevices;			//list of accessed devices in the current process
+	private ArrayList<Resource> requiredResources;	//list of resources required by this process
+	private ArrayList<Resource> usedResources;		//list of accessed resources in the current process
 	private int waitTime;
 	private int cpuTime;
-	private int quantum; // Quantum consumed
+	private int quantum;							//Quantum consumed
 	private int current;
 	private int completeTime;
 	private int responseTime;
-	private int order; // value to compare
-	private String state;
+	private int order; 								//value to compare
+	private String state;							//current state of the current process
 	private double iorate;
-	private String schedule;
+	private int schedule;							//current scheduling algorithm on the process
 	private static int maxPid = 1;
 	private boolean[] flag;
 	private boolean isPeriodic;
@@ -173,18 +177,86 @@ public class Process implements Comparable<Process>, Cloneable{
 	}
 	
 	//Returns the current schedule on the process
-	public String getSchedule(){
+	public int getSchedule(){
 		return this.schedule;
 	}
 	
 	//Sets a schedule on the current process
-	public void setSchedule(String schedule){
+	public void setSchedule(int schedule){
 		this.schedule = schedule;
 	}
 	
 	//Returns the unique process identifier
 	public static int getMaxPid() {
 		return maxPid;
+	}
+	
+	//Adds a device that the current process may access
+	public void addDevice(String deviceName){
+		Device device = new Device(deviceName);						//create new device
+		if(device.isAvailable()){									//check availability
+			usedDevices.add(device);								//add device to list
+			device.setLock(this);									//lock device
+		}
+	}
+	
+	//Removes a device from the current process
+	public void removeDevice(Device device){
+		for(Device dev : usedDevices){								//locate device in used devices
+			if(dev == device){
+				usedDevices.remove(usedDevices.indexOf(dev));		//remove device
+				dev.releaseLock();									//unlock device
+			}
+		}
+	}
+	
+	//Returns a specific device from the current process
+	public Device getDevice(Device device){
+		for(Device dev : usedDevices){								//locate device in used devices
+			if(dev == device){
+				return dev;											//return found device
+			}
+		}
+		return null;												//else return null
+	}
+	
+	//Returns all devices accessed by this process as an arraylist
+	public ArrayList<Device> getAllDevice(){
+		return usedDevices;
+	}
+	
+	//Adds a resource that the current process may access
+	public void addResource(String resourceName){
+		Resource resource = new Resource(resourceName);				//create new resource
+		if(resource.isAvailable()){									//check availability
+			usedResources.add(resource);							//add device to list
+			resource.setLock(this);									//lock device
+		}
+	}
+	
+	//Removes a resource from the current process
+	public void removeResource(Resource resource){
+		for(Resource res : usedResources){							//locate resource in used devices
+			if(res == resource){
+				usedResources.remove(usedResources.indexOf(res));	//remove resource
+				res.releaseLock();									//unlock resource
+			}
+		}
+	}
+	
+	//Returns a specific resource from the current process
+	public Resource getResource(Resource resource){
+		for(Resource res : usedResources){							//locate resource in used resources
+			if(res == resource){
+				return res;											//return found resource
+			}
+		}
+		return null;												//else return null
+	}
+	
+	//Returns all resources accessed by this process as an arraylist
+	public ArrayList<Resource> getAllResource(){
+		return usedResources;
 	}
 	
 	/**
