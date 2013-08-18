@@ -262,6 +262,7 @@ public class Process implements Comparable<Process>, Cloneable{
 		for(int i = 0; i < requiredDevices.length; i++){
 			if(!Device.findDevice(requiredDevices[i]).isAvailable()){
 				found = false;
+				break;
 			}
 		}
 		
@@ -323,6 +324,7 @@ public class Process implements Comparable<Process>, Cloneable{
 		for(int i = 0; i < requiredResources.length; i++){
 			if(!Resource.findResource(requiredResources[i]).isAvailable()){
 				found = false;
+				break;
 			}
 		}
 		
