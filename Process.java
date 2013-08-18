@@ -28,6 +28,7 @@ public class Process implements Comparable<Process>, Cloneable{
 	private double iorate;
 	private String schedule;
 	private static int maxPid = 1;
+	private boolean[] flag;
 	private boolean isPeriodic;
 
 	/** 
@@ -53,6 +54,7 @@ public class Process implements Comparable<Process>, Cloneable{
 		this.iorate = (double) ioburst / burstsCycle.size();
 		this.state = PROCESS_STATE_NEW;
 		maxPid++;
+		flag = new boolean[pid];
 	}
 	
 	//Returns the current process id
@@ -216,7 +218,24 @@ public class Process implements Comparable<Process>, Cloneable{
 		return burstsCycle.get(getCurrentBurst()) == 1;
 	}
 	
+	//Access critical section of process
 	public void accessCriticalSection(){
+
+		//flag[] is boolean array; and turn is an integer
+		int turn;
+
+		flag[pid] = true;
+	    turn = 1;
+	    while (flag[pid] == true && turn == 1)
+	    {
+	        // busy wait
+	    }
+	    
+	    // critical section
+	    // access a shared resource between processes
+	    // end of critical section
+	    
+	    flag[pid] = false;
 		
 	}
 
