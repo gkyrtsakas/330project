@@ -94,13 +94,7 @@ public class NonPreemptiveScheduler
 		return queue;
 	}
 	
-	public LinkedList moveFromRunningToTerminated(Process process, LinkedList<Process> queue)
-	{
-		queue.add(process);		
-		return queue;
-	}
-	
-	public LinkedList moveFromRunningToWaiting(Process process, LinkedList<Process> queue)
+	public LinkedList moveFromRunning(Process process, LinkedList<Process> queue)
 	{
 		queue.add(process);		
 		return queue;
