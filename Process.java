@@ -297,6 +297,16 @@ public class Process implements Comparable<Process>, Cloneable{
 		return null;												//else return null
 	}
 	
+	//Returns an array of all required resources
+	public String[] getRequiredDevices(){
+		return this.requiredDevices;
+	}
+	
+	//Returns an array of all required devices
+	public String[] getRequiredResources(){
+		return this.requiredResources;
+	}
+	
 	//Returns all resources accessed by this process as an arraylist
 	public ArrayList<Resource> getAllResource(){
 		return usedResources;
