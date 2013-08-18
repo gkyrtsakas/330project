@@ -220,9 +220,18 @@ public class Process implements Comparable<Process>, Cloneable{
 	//Adds a device that the current process may access
 	public void addDevice(String deviceName){
 		Device device = new Device(deviceName);						//create new device
-		if(isDeviceRequired(device) && device.isAvailable()){		//check availability
+		if(!isDeviceRequired(device)){
+			return;
+		}
+		
+		if(device.isAvailable()){									//check availability
 			usedDevices.add(device);								//add device to list
 			device.setLock(this);									//lock device
+			this.state = PROCESS_STATE_READY;
+		}
+		else{
+			this.state = PROCESS_STATE_RUNNING;
+			this.state = PROCESS_STATE_WAITING;
 		}
 	}
 	
@@ -254,9 +263,17 @@ public class Process implements Comparable<Process>, Cloneable{
 	//Adds a resource that the current process may access
 	public void addResource(String resourceName){
 		Resource resource = new Resource(resourceName);				//create new resource
-		if(isResourceRequired(resource) && resource.isAvailable()){	//check availability
+		if(!isResourceRequired(resource)){
+			return;
+		}
+		if(resource.isAvailable()){									//check availability		
 			usedResources.add(resource);							//add device to list
 			resource.setLock(this);									//lock device
+			this.state = PROCESS_STATE_READY;
+		}
+		else{
+			this.state = PROCESS_STATE_RUNNING;
+			this.state = PROCESS_STATE_WAITING;
 		}
 	}
 	
