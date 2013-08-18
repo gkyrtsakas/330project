@@ -255,6 +255,25 @@ public class Process implements Comparable<Process>, Cloneable{
 		return null;												//else return null
 	}
 	
+	//Returns True if all required devices are accessible
+	public boolean getDevicesAvailable(){
+		boolean found = true;
+		
+		for(int i = 0; i < requiredDevices.length; i++){
+			if(!Device.findDevice(requiredDevices[i]).isAvailable()){
+				found = false;
+			}
+		}
+		
+		if(found){
+			for(int j = 0; j < requiredDevices.length; j++){
+				Device.findDevice(requiredDevices[j]).setLock(this);
+			}
+		}
+		
+		return found;
+	}
+	
 	//Returns all devices accessed by this process as an arraylist
 	public ArrayList<Device> getAllDevice(){
 		return usedDevices;
@@ -295,6 +314,25 @@ public class Process implements Comparable<Process>, Cloneable{
 			}
 		}
 		return null;												//else return null
+	}
+	
+	//Returns True if all required resources are accessible
+	public boolean getResourcesAvailable(){
+		boolean found = true;
+		
+		for(int i = 0; i < requiredResources.length; i++){
+			if(!Resource.findResource(requiredResources[i]).isAvailable()){
+				found = false;
+			}
+		}
+		
+		if(found){
+			for(int j = 0; j < requiredResources.length; j++){
+				Resource.findResource(requiredResources[j]).setLock(this);
+			}
+		}
+		
+		return found;
 	}
 	
 	//Returns an array of all required resources
