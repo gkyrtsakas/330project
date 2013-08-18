@@ -101,8 +101,8 @@ public class Device {
 	
 	public static void main(String args[]){
 		Vector<Integer> x = new Vector<Integer>(1);
-		Process p1 = new Process(1, "The process", 2, 3, false, x);
-		Process p2 = new Process(2, "The Thing", 3, 3, false, x);
+		Process p1 = new Process(1, "The process", 2, 3, false, x, "", "");
+		Process p2 = new Process(2, "The Thing", 3, 3, false, x, "", "");
 		Device d = new Device("Hi there I'mma device");
 		d.setLock(p1);
 		d = new Device("Hi there I'mma device2");

@@ -98,8 +98,8 @@ public class Resource {
 	
 	public static void main(String args[]){
 		Vector<Integer> x = new Vector<Integer>(1);
-		Process p1 = new Process(1, "The process", 2, 3, false, x);
-		Process p2 = new Process(2, "The Thing", 3, 3, false, x);
+		Process p1 = new Process(1, "The process", 2, 3, false, x, "", "");
+		Process p2 = new Process(2, "The Thing", 3, 3, false, x, "", "");
 		Resource r = new Resource("Hi there I'mma device");
 		r.setLock(p1);
 		r = new Resource("Hi there I'mma device2");
