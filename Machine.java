@@ -3,6 +3,7 @@ public class Machine {
 	private long maxRAM = 3435973868L; 	// 4GB RAM in bits
 	private int pageSize = 65535;		// 8KB page size
 	private long clock;
+	private int logicalZero = 0;
 	
 	
 	private static final Machine instance = new Machine(); //run one machine at a time
