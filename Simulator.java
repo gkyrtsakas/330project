@@ -52,6 +52,8 @@ public class Simulator implements Runnable {
 			System.out.println("2. Add Process");
 			System.out.println("3. Run Simulator");
 			System.out.println("4. Change Scheduling Type");
+			System.out.println("5. Print Device Table");
+			System.out.println("6. Print Resource Table");
 			
 			@SuppressWarnings("resource")
 			Scanner reader = new Scanner(System.in);
@@ -62,15 +64,17 @@ public class Simulator implements Runnable {
 				System.out.println("Done...");
 				break;
 			case 2:
-				int flag = 1;
+				int moreProcessFlag = 1;
+				int moreDeviceFlag = 1;
+				int moreResourceFlag = 1;
 				String name;
 				int pid;
 				int prio;
 				int subtime;
 				int bursts;
-				String devices;
-				String resources;
-				while (flag == 1){
+				String devices = "";
+				String resources = "";
+				while (moreProcessFlag == 1){
 					System.out.println("Please enter a name for the process");
 					name = reader.next();
 					System.out.println("Please enter an integer pid");
@@ -81,16 +85,27 @@ public class Simulator implements Runnable {
 					subtime = reader.nextInt();
 					System.out.println("Please enter an integer number of bursts > 0");
 					bursts = reader.nextInt();
-					System.out.println("Please enter required devices in the format \"D-x D-y\", where x and y are integers");
-					devices = reader.next();
-					System.out.println("Please enter required resources in the format \"R-x R-y\", where x and y are integers");
-					resources = reader.next();
+					while (moreDeviceFlag == 1)
+					{
+						System.out.println("Please enter required device in the format \"D-x\", where x is an integer");
+						devices += " " + reader.next();
+						System.out.println("Would you like to enter more devices? 1 for yes, 0 for no");
+						moreDeviceFlag = reader.nextInt();
+					}
+					while (moreResourceFlag == 1)
+					{
+						System.out.println("Please enter required resources in the format \"R-x R-y\", where x and y are integers");
+						resources += " " + reader.next();
+						System.out.println("Would you like to enter more resources? 1 for yes, 0 for no");
+						moreResourceFlag = reader.nextInt();
+						
+					}
 					Process pTemp = new Process (pid, name, prio, subtime, bursts, devices, resources);
 					queue.addProcess(pTemp);
 					//add process
 					System.out.println("Process Added");
 					System.out.println("Enter 1 to add another process, 0 to return to main menu");
-					flag = reader.nextInt();
+					moreProcessFlag = reader.nextInt();
 				}
 				break;
 			case 3:
@@ -98,8 +113,8 @@ public class Simulator implements Runnable {
 				while (!queue.isFinished()){
 					System.out.println(queue.toString());
 					queue.update();
-					queue.cycleIncrement();
 					queue.toString();
+					queue.cycleIncrement();
 					try {
 						Thread.sleep(1000);
 					} catch(InterruptedException ex) {
@@ -118,6 +133,12 @@ public class Simulator implements Runnable {
 				System.out.println("3. Priotiry Scheduling");
 				queue.setScheduler(reader.nextInt());
 				System.out.println("Scheduler Changed!");
+				break;
+			case 5:
+				System.out.println(Device.getTableInfo());
+				break;
+			case 6:
+				System.out.println(Resource.getTableInfo());
 				break;
 			default:
 				break;

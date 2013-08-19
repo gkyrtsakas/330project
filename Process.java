@@ -39,8 +39,8 @@ public class Process{
 		this.priority = priority;
 		this.submitTime = submitTime;
 		this.burstCycles = burstsCycle;
-		this.requiredDevices = requiredDevices.split(" ");
-		this.requiredResources = requiredResources.split(" ");
+		this.requiredDevices = requiredDevices.trim().split(" ");
+		this.requiredResources = requiredResources.trim().split(" ");
 		this.usedDevices = new ArrayList<Device>();
 		this.usedResources = new ArrayList<Resource>();
 		maxPid++;
