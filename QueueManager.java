@@ -72,7 +72,7 @@ public class QueueManager extends NonPreemptiveScheduler{
 	
 	public void moveFromNew(){
 		if (!newQueue.isEmpty()){
-			while(newQueue.peek().getSubmitTime() <= cycleTime){
+			while(newQueue.peek().getSubmitTime() < cycleTime){
 				readyQueue = moveFromNewToReady(newQueue.poll(), readyQueue);
 			}
 		}
@@ -86,8 +86,8 @@ public class QueueManager extends NonPreemptiveScheduler{
 	}
 	
 	public void moveFromRun(){
-		if(runQueue.peek().getAllDevice().size() != runQueue.peek().getRequiredDevices().length 
-				|| runQueue.peek().getAllResource().size() != runQueue.peek().getRequiredResources().length){
+		if(!runQueue.isEmpty() && (runQueue.peek().getAllDevice().size() != runQueue.peek().getRequiredDevices().length
+				|| runQueue.peek().getAllResource().size() != runQueue.peek().getRequiredResources().length)){
 			runQueue.peek().setState("wait");
 			waitQueue = moveFromRunning(runQueue.poll(), waitQueue);
 		}
