@@ -104,6 +104,9 @@ public class NonPreemptiveScheduler
 				queue.add(process);
 			}
 		}
+		
+		process.setState("ready");
+		
 		return queue;
 	}
 	

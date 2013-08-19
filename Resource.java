@@ -9,7 +9,7 @@ public class Resource {
 	private boolean locked;
 	
 	
-	Resource(String name){
+	public Resource(String name){
 		this.resourceName = name;
 		locked = false;
 		resources.add(this);

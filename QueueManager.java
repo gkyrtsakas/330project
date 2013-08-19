@@ -28,6 +28,34 @@ public class QueueManager extends NonPreemptiveScheduler{
 		moveFromReady();
 	}
 	
+	public void setDefaultDeviceTable()
+	{
+		Device d1 = new Device("d1");
+		Device d2 = new Device("d2");
+		Device d3 = new Device("d3");
+		Device d4 = new Device("d4");
+		Device d5 = new Device("d5");
+		Device d6 = new Device("d6");
+		Device d7 = new Device("d7");
+		Device d8 = new Device("d8");
+		Device d9 = new Device("d9");
+		Device d10 = new Device("d10");
+	}
+	
+	public void setDefaultResourceTable()
+	{
+		Resource r1 = new Resource("r1");
+		Resource r2 = new Resource("r2");
+		Resource r3 = new Resource("r3");
+		Resource r4 = new Resource("r4");
+		Resource r5 = new Resource("r5");
+		Resource r6 = new Resource("r6");
+		Resource r7 = new Resource("r7");
+		Resource r8 = new Resource("r8");
+		Resource r9 = new Resource("r9");
+		Resource r10 = new Resource("r10");
+	}
+	
 	public void cycleIncrement(){
 		cycleTime ++;
 	}

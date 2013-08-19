@@ -8,7 +8,7 @@ public class Device {
 	protected Process currentProcess;
 	protected boolean locked;
 	
-	Device(String name){
+	public Device(String name){
 		this.deviceName = name;
 		locked = false;
 		devices.add(this);
