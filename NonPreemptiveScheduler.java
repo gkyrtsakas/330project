@@ -34,7 +34,7 @@ public class NonPreemptiveScheduler
 		boolean flag = false;
 		
 		//Parse through the linked list,
-		for (int k=0; k<=queue.size(); k++)
+		for (int k=0; k<queue.size(); k++)
 		{
 			//and when the submitTime is less than the submit time of the next item in the list
 			if (process.getSubmitTime() < queue.get(k).getSubmitTime())
