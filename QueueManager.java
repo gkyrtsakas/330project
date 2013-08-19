@@ -76,6 +76,15 @@ public class QueueManager extends NonPreemptiveScheduler{
 		Resource r10 = new Resource("r10");
 	}
 	
+	public void emptyQueues()
+	{
+		newQueue = new LinkedList<Process>();
+		readyQueue = new LinkedList<Process>();
+		runQueue = new LinkedList<Process>();
+		waitQueue = new LinkedList<Process>();
+		terminateQueue = new LinkedList<Process>();
+	}
+	
 	public void cycleIncrement(){
 		cycleTime ++;
 	}
@@ -88,6 +97,8 @@ public class QueueManager extends NonPreemptiveScheduler{
 			}
 		}
 	}
+	
+	
 	
 	@SuppressWarnings("unchecked")
 	public void moveFromReady(){

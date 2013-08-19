@@ -23,21 +23,7 @@ public class Simulator implements Runnable {
 		
 		QueueManager queue = new QueueManager(1);
 		queue.setDefaultDeviceTable();
-		queue.setDefaultResourceTable();
-		
-		//						pid name pri subtime  burst	dev req		res req
-		Process p1 = new Process(1,"p1", 1, 	0, 		6, 	"D-1 D-2", "R-1 R-3");
-		Process p2 = new Process(2,"p2", 2, 	3, 		1,  "D-4 D-2", "R-2 R-5");
-		Process p3 = new Process(3,"p3", 1, 	3, 		3,  "D-1 D-2", "R-1 R-3");
-		Process p4 = new Process(4,"p4", 3, 	3, 		2,  "D-8 D-9", "R-9 R-10");
-		Process p5 = new Process(5,"p5", 1, 	6, 		9,  "D-1 D-2", "R-1 R-2");
-		
-		queue.addProcess(p1);
-		queue.addProcess(p2);
-		queue.addProcess(p3);
-		queue.addProcess(p4);
-		queue.addProcess(p5);
-		
+		queue.setDefaultResourceTable();		
 		
 		int response = 1;
 		String input;
@@ -54,6 +40,7 @@ public class Simulator implements Runnable {
 			System.out.println("4. Change Scheduling Type");
 			System.out.println("5. Print Device Table");
 			System.out.println("6. Print Resource Table");
+			System.out.println("7. Reset Queues");
 			
 			@SuppressWarnings("resource")
 			Scanner reader = new Scanner(System.in);
@@ -61,6 +48,19 @@ public class Simulator implements Runnable {
 			
 			switch (response){
 			case 1:
+				queue.emptyQueues();
+				//						pid name pri subtime  burst	dev req		res req
+				Process p1 = new Process(1,"p1", 1, 	0, 		6, 	"D-1 D-2", "R-1 R-3");
+				Process p2 = new Process(2,"p2", 2, 	3, 		1,  "D-4 D-2", "R-2 R-5");
+				Process p3 = new Process(3,"p3", 1, 	3, 		3,  "D-1 D-2", "R-1 R-3");
+				Process p4 = new Process(4,"p4", 3, 	3, 		2,  "D-8 D-9", "R-9 R-10");
+				Process p5 = new Process(5,"p5", 1, 	6, 		9,  "D-1 D-2", "R-1 R-2");
+
+				queue.addProcess(p1);
+				queue.addProcess(p2);
+				queue.addProcess(p3);
+				queue.addProcess(p4);
+				queue.addProcess(p5);
 				System.out.println("Done...");
 				break;
 			case 2:
@@ -94,7 +94,7 @@ public class Simulator implements Runnable {
 					}
 					while (moreResourceFlag == 1)
 					{
-						System.out.println("Please enter required resources in the format \"R-x R-y\", where x and y are integers");
+						System.out.println("Please enter required resources in the format \"R-x\", where x is an integer");
 						resources += " " + reader.next();
 						System.out.println("Would you like to enter more resources? 1 for yes, 0 for no");
 						moreResourceFlag = reader.nextInt();
@@ -140,6 +140,8 @@ public class Simulator implements Runnable {
 			case 6:
 				System.out.println(Resource.getTableInfo());
 				break;
+			case 7:
+				queue.emptyQueues();
 			default:
 				break;
 			}
