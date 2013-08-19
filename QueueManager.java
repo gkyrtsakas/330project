@@ -76,6 +76,7 @@ public class QueueManager extends NonPreemptiveScheduler{
 		Resource r9 = new Resource("r9");
 		Resource r10 = new Resource("r10");
 	}
+<<<<<<< HEAD
 	
 	public void emptyQueues()
 	{
@@ -91,6 +92,10 @@ public class QueueManager extends NonPreemptiveScheduler{
 	// Increments cycleTime to display relative time passed 
 	// from when processes began to run
 
+=======
+	// Increments cycleTime to display relative time passed 
+	// from when processes began to run
+>>>>>>> f2ef6e4bcddbb1d663802bb3c148477b0030b45f
 	public void cycleIncrement(){
 		cycleTime ++;
 	}
