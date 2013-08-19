@@ -17,6 +17,8 @@ public class Simulator implements Runnable {
 	
 	//create objects of every other class.
 	QueueManager queue = new QueueManager(1);
+	queue.setDefaultDeviceTable();
+	
 	//						pid name pri subtime  burst	dev req		res req
 	Process p1 = new Process(1,"p1", 1, 	0, 		6, 	"D-1 D-2", "R-1 R-3");
 	Process p2 = new Process(2,"p2", 2, 	3, 		1,  "D-4 D-2", "R-2 R-5");
