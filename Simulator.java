@@ -17,8 +17,12 @@ public class Simulator implements Runnable {
 	
 	//create objects of every other class.
 	QueueManager queue = new QueueManager(1);
-
-
+	//						pid name pri subtime  burst	dev req		res req
+	Process p1 = new Process(1,"p1", 1, 	0, 		6, 	"D-1 D-2", "R-1 R-3");
+	Process p2 = new Process(2,"p2", 2, 	3, 		1,  "D-4 D-2", "R-2 R-5");
+	Process p3 = new Process(3,"p3", 1, 	3, 		3,  "D-1 D-2", "R-1 R-3");
+	Process p4 = new Process(4,"p4", 3, 	4, 		2,  "D-8 D-9", "R-2 R-4");
+	Process p5 = new Process(5,"p3", 1, 	6, 		9,  "D-1 D-2", "R-1 R-2");
 
 	public void run() {
 		int response = 1;
@@ -33,7 +37,8 @@ public class Simulator implements Runnable {
 			System.out.println("2. Add Process");
 			System.out.println("3. Add I/O Device");
 			System.out.println("4. Run Simulator");
-			System.out.println("5. Print Last Run Statistics");
+			System.out.println("5. Change Scheduling Type");
+			System.out.println("6. Print Last Run Statistics");
 			
 			@SuppressWarnings("resource")
 			Scanner reader = new Scanner(System.in);
@@ -45,7 +50,7 @@ public class Simulator implements Runnable {
 				break;
 			case 2:
 				//add process
-				System.out.println("And we did something here");
+				System.out.println("Process Added");
 				break;
 			case 3:
 				System.out.println("Please Enter a Name for the Device");
@@ -57,6 +62,9 @@ public class Simulator implements Runnable {
 				//run sim
 				break;
 			case 5:
+				//change scheduling
+				break;
+			case 6:
 				//print stats
 				break;
 			default:
