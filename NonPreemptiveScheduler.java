@@ -78,15 +78,16 @@ public class NonPreemptiveScheduler
 			boolean flag = false;
 			
 			//scan the entire array contents...
-			for (int k=0; k<=queue.size(); k++)
+			for (int k=0; k<queue.size(); k++)
 			{
 				//...and place the process into the queue, so that it is sorted based on size
 				if (process.getBurstsCycle() < queue.get(k).getBurstsCycle())
 				{
 					queue.add(k, process);
+					//flag turns on when process has been added to the queue
+					flag = true;
+					break;
 				}
-				//flag turns on when process has been added to the queue
-				flag = true;
 			}
 			
 			//if process has not been added yet...
@@ -102,15 +103,16 @@ public class NonPreemptiveScheduler
 			boolean flag = false;
 			
 			//Scan through the entire array...
-			for (int k=0; k<=queue.size(); k++)
+			for (int k=0; k<queue.size(); k++)
 			{
 				//and add to the queue based on priority (in event of a tie, put after the processes that were in queue
 				if (process.getPriority() < queue.get(k).getPriority())
 				{
 					queue.add(k, process);
+					//flag on when process has been added
+					flag = true;
+					break;
 				}
-				//flag on when process has been added
-				flag = true;
 			}
 			
 			//if process has not been added yet...
@@ -159,13 +161,14 @@ public class NonPreemptiveScheduler
 		{
 			boolean flag = false;
 			
-			for (int k=0; k<=queue.size(); k++)
+			for (int k=0; k<queue.size(); k++)
 			{
 				if (process.getBurstsCycle() < queue.get(k).getBurstsCycle())
 				{
 					queue.add(k, process);
+					flag = true;
+					break;
 				}
-				flag = true;
 			}
 			
 			if (flag==false)
@@ -178,13 +181,14 @@ public class NonPreemptiveScheduler
 		{
 			boolean flag = false;
 			
-			for (int k=0; k<=queue.size(); k++)
+			for (int k=0; k<queue.size(); k++)
 			{
 				if (process.getPriority() < queue.get(k).getPriority())
 				{
 					queue.add(k, process);
+					flag = true;
+					break;
 				}
-				flag = true;
 			}
 			
 			if (flag==false)
