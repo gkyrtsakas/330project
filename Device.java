@@ -7,7 +7,7 @@ public class Device {
 	protected String deviceName;
 	protected Process currentProcess;
 	protected boolean locked;
-	
+	//Constructor
 	public Device(String name){
 		this.deviceName = name;
 		locked = false;
@@ -15,11 +15,11 @@ public class Device {
 		count ++;
 		portID = "D-" + count;
 	}
-	
+	// Returns all devices creates as of moment
 	static ArrayList<Device> getAllDevices(){
 		return devices;
 	}
-	
+	// returns string containing a prettily formatted table with device info
 	static String getTableInfo(){
 		String isLocked = "", processName = "", deviceName = "", portID = "", 
 		returnString = "|-------Device Name-------|---Port ID---|-----Current Process-----|--Locked--|";
@@ -60,7 +60,9 @@ public class Device {
 		}
 		return returnString;
 	}
-	
+	// Looks for a device with a specified port ID
+	// If one exists it returns the device
+	// Else, it displays an error message
 	static Device findDevice(String devicePort){
 		int index = Integer.parseInt((devicePort.split("-"))[1]);
 		if(index <= count){
@@ -71,30 +73,32 @@ public class Device {
 			return null;
 		}
 	}
-	
+	// Return device's name
 	String getName(){
 		return deviceName;
 	}
-	
+	// Sets lock when a process is using it so that it
+	// cannot be used by other processes at the same time
 	void setLock(Process newProcess){
 		if(!locked){
 			locked = true;
 			this.currentProcess = newProcess;
 		}
 		else{
-			System.out.println("Error: Locked");
+			System.out.println("Error: Locked by process " + currentProcess);
 		}
 	}
-	
+	// Releases lock when the process is done so that it can 
+	// be used by other processes
 	void releaseLock(){
 		locked = false;
 		this.currentProcess = (Process)null;
 	}
-	
+	// returns whether or not a device is available
 	boolean isAvailable(){
 		return !locked;
 	}
-	
+	// returns the port id of the device
 	String getPortID(){
 		return this.portID;
 	}

@@ -12,16 +12,17 @@ public class QueueManager extends NonPreemptiveScheduler{
 	private static LinkedList<Process> waitQueue = new LinkedList<Process>();
 	private static LinkedList<Process> terminateQueue = new LinkedList<Process>();
 	private static int cycleTime = 0;			//Keeps track of which cycle it is currently working in, in order to manage processes
-	
+	// Constructor
 	public QueueManager(int schedulingType){	
 		super(schedulingType);
 	}
-	
+	//Adds a process to the new queue using NonPreemptiveScheduler 
+	//class' moveToNew() function
 	public void addProcess(Process process){
 		moveToNew(process, newQueue);
 		moveFromNew();
 	}
-	
+	// Function called by the simulator to update all the queues
 	public void update(){
 		if(!newQueue.isEmpty())
 			moveFromNew();
@@ -32,12 +33,12 @@ public class QueueManager extends NonPreemptiveScheduler{
 		if(!readyQueue.isEmpty())
 			moveFromReady();
 	}
-	
+	// returns current cycle time
 	public int getCycleTime()
 	{
 		return cycleTime;
 	}
-	
+	// returns whether or not the processes have all been terminated
 	public boolean isFinished()
 	{
 		if(newQueue.isEmpty() && readyQueue.isEmpty() && runQueue.isEmpty() && waitQueue.isEmpty())
@@ -47,7 +48,7 @@ public class QueueManager extends NonPreemptiveScheduler{
 		
 		return false;
 	}
-	
+	// sets up all default devices to be used with the simulator
 	public void setDefaultDeviceTable()
 	{
 		Device d1 = new Device("d1");
@@ -61,7 +62,7 @@ public class QueueManager extends NonPreemptiveScheduler{
 		Device d9 = new Device("d9");
 		Device d10 = new Device("d10");
 	}
-	
+	// sets up all default resources to be used with the simulator
 	public void setDefaultResourceTable()
 	{
 		Resource r1 = new Resource("r1");
@@ -86,10 +87,15 @@ public class QueueManager extends NonPreemptiveScheduler{
 		cycleTime = 0;
 	}
 	
+
+	// Increments cycleTime to display relative time passed 
+	// from when processes began to run
+
 	public void cycleIncrement(){
 		cycleTime ++;
 	}
-	
+	// Moves items from the new queue into the ready queue if
+	// the submit time is less than the cycle time
 	public void moveFromNew(){
 		if (!newQueue.isEmpty()){
 			if(newQueue.peek().getSubmitTime() <= cycleTime){
@@ -98,9 +104,8 @@ public class QueueManager extends NonPreemptiveScheduler{
 			}
 		}
 	}
-	
-	
-	
+	// Moves processes from the ready queue to the running queue
+	// from the front of the list
 	@SuppressWarnings("unchecked")
 	public void moveFromReady(){
 		while(runQueue.isEmpty() && !readyQueue.isEmpty()){
@@ -108,7 +113,12 @@ public class QueueManager extends NonPreemptiveScheduler{
 			moveFromRun();
 		}
 	}
-	
+	// Moves processes from the run queue to:
+	// 	1) waiting queue if it has no resources and is waiting on resources
+	// 		and devices to be locked 
+	// 	2) terminated queue if it is finished running
+	// Otherwise it continues to decrement the burst time of the process
+	// untill it is 0
 	public void moveFromRun(){
 		if (!runQueue.isEmpty()){
 			if((runQueue.peek().getAllDevice().size() != runQueue.peek().getRequiredDevices().length
@@ -130,7 +140,8 @@ public class QueueManager extends NonPreemptiveScheduler{
 		}
 		
 	}
-	
+	// Moves processes from the wait queue to the ready queue when they are able
+	// to lock all necessary resources and devices.
 	public void moveFromWait(){
 		Process p;
 		if(!waitQueue.isEmpty()){
@@ -146,7 +157,7 @@ public class QueueManager extends NonPreemptiveScheduler{
 			}
 		}
 	}
-	
+	// Returns a table of queues displaying which processes are present in which queues
 	public String toString(){
 		String returnString = "Current Cycle Time: " + cycleTime,
 				newS, readyS, runS, waitS, termS;

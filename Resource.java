@@ -8,7 +8,7 @@ public class Resource {
 	private Process currentProcess;
 	private boolean locked;
 	
-	
+	// Constructor
 	public Resource(String name){
 		this.resourceName = name;
 		locked = false;
@@ -16,11 +16,12 @@ public class Resource {
 		count ++;
 		portID = "R-" + count;
 	}
-	
+	// returns all resources created as of the moment
 	static ArrayList<Resource> getAllResources(){
 		return resources;
 	}
-	
+	// returns the resource in the specified port
+	// if found. Else, prints an error string.
 	static Resource findResource(String resourcePort){
 		int index = Integer.parseInt((resourcePort.split("-"))[1]);
 		if(index <= count){
@@ -31,7 +32,7 @@ public class Resource {
 			return null;
 		}
 	}
-	
+	// Prints all resources in a pretty table
 	static String getTableInfo(){
 		String isLocked = "", processName = "", resourceName = "", portID = "", 
 		returnString = "|------Resource Name------|---Port ID---|-----Current Process-----|--Locked--|";
@@ -72,26 +73,26 @@ public class Resource {
 		}
 		return returnString;
 	}
-	
+	// Sets the lock and displays the process currently being used
 	void setLock(Process newProcess){
 		if(!locked){
 			locked = true;
 			this.currentProcess = newProcess;
 		}
 		else{
-			System.out.println("Error: Locked");
+			System.out.println("Error: Locked by Process " + currentProcess.getName());
 		}
 	}
-	
+	// Releases lock when the process is complete
 	void releaseLock(){
 		locked = false;
 		this.currentProcess = (Process)null;
 	}
-	
+	// returns boolen to determine if the lock is available
 	boolean isAvailable(){
 		return !locked;
 	}
-	
+	// returns port ID
 	String getPortID(){
 		return this.portID;
 	}
