@@ -164,6 +164,20 @@ public class Process{
 		}
 	}
 	
+	//Unlocks all devices currently used by this process
+	public boolean removeAllDevices(){
+		try{
+			for(Device dev : usedDevices){								//locate device in used devices
+				usedDevices.remove(usedDevices.indexOf(dev));			//remove device
+				dev.releaseLock();										//unlock device
+			}
+			return true;
+		}
+		catch(Exception e){
+			return false;
+		}
+	}
+		
 	//Returns a specific device from the current process
 	public Device getDevice(Device device){
 		for(Device dev : usedDevices){								//locate device in used devices
@@ -181,6 +195,7 @@ public class Process{
 		for(int i = 0; i < requiredDevices.length; i++){
 			if(!Device.findDevice(requiredDevices[i]).isAvailable()){
 				found = false;
+				removeAllResources();
 				break;
 			}
 		}
@@ -226,6 +241,20 @@ public class Process{
 		}
 	}
 	
+	//Unlocks all resources currently used by this process
+	public boolean removeAllResources(){
+		try{
+			for(Resource res : usedResources){							//locate resource in used resources
+				usedResources.remove(usedResources.indexOf(res));		//remove resource
+				res.releaseLock();										//unlock resource
+			}
+			return true;
+		}
+		catch(Exception e){
+			return false;
+		}
+	}
+	
 	//Returns a specific resource from the current process
 	public Resource getResource(Resource resource){
 		for(Resource res : usedResources){							//locate resource in used resources
@@ -243,6 +272,7 @@ public class Process{
 		for(int i = 0; i < requiredResources.length; i++){
 			if(!Resource.findResource(requiredResources[i]).isAvailable()){
 				found = false;
+				removeAllDevices();
 				break;
 			}
 		}
