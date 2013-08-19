@@ -12,7 +12,7 @@ public class QueueManager extends NonPreemptiveScheduler{
 	private static LinkedList<Process> terminateQueue = new LinkedList<Process>();
 	private static int cycleTime = 0;			//Keeps track of which cycle it is currently working in, in order to manage processes
 	
-	QueueManager(int schedulingType){	
+	public QueueManager(int schedulingType){	
 		super(schedulingType);
 	}
 	
@@ -26,6 +26,16 @@ public class QueueManager extends NonPreemptiveScheduler{
 		moveFromRun();
 		moveFromWait();
 		moveFromReady();
+	}
+	
+	public boolean isFinished()
+	{
+		if(newQueue.isEmpty() && readyQueue.isEmpty() && runQueue.isEmpty() && waitQueue.isEmpty())
+		{
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public void setDefaultDeviceTable()
