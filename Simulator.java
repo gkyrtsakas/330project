@@ -14,6 +14,9 @@ public class Simulator implements Runnable {
 		Thread t = new Thread(new Simulator());
 		t.start();
 	}
+	
+	//create objects of every other class.
+	QueueManager queue = new QueueManager(1);
 
 
 
