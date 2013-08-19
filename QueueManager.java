@@ -83,6 +83,7 @@ public class QueueManager extends NonPreemptiveScheduler{
 		runQueue = new LinkedList<Process>();
 		waitQueue = new LinkedList<Process>();
 		terminateQueue = new LinkedList<Process>();
+		cycleTime = 0;
 	}
 	
 	public void cycleIncrement(){
