@@ -4,10 +4,6 @@ public class Simulator implements Runnable {
 	//This class will be used to gather and print statistics for the simulation run
 	//as well as being the place where the simulation is actually run
 	//It will also compare two or more different scheduling algorithms
-
-	public void getStats (){
-		
-	}
 	
 	
 	public static void main(String[] args) {
@@ -26,7 +22,6 @@ public class Simulator implements Runnable {
 		queue.setDefaultResourceTable();		
 		
 		int response = 1;
-		String input;
 		
 		while (response > 0){
 			
@@ -49,12 +44,12 @@ public class Simulator implements Runnable {
 			switch (response){
 			case 1:
 				queue.emptyQueues();
-				//						pid name pri subtime  burst	dev req		res req
-				Process p1 = new Process(1,"p1", 1, 	0, 		6, 	"D-1 D-2", "R-1 R-3");
-				Process p2 = new Process(2,"p2", 2, 	3, 		1,  "D-4 D-2", "R-2 R-5");
-				Process p3 = new Process(3,"p3", 1, 	3, 		3,  "D-1 D-2", "R-1 R-3");
-				Process p4 = new Process(4,"p4", 3, 	3, 		2,  "D-8 D-9", "R-9 R-10");
-				Process p5 = new Process(5,"p5", 1, 	6, 		9,  "D-1 D-2", "R-1 R-2");
+				//						pid name pri size subtime  burst	dev req		res req
+				Process p1 = new Process(1,"p1", 1, 	5,	0, 		6, 		"D-1 D-2", "R-1 R-3");
+				Process p2 = new Process(2,"p2", 2, 	3,	3, 		1,  	"D-4 D-2", "R-2 R-5");
+				Process p3 = new Process(3,"p3", 1, 	10,	3, 		3,  	"D-1 D-2", "R-1 R-3");
+				Process p4 = new Process(4,"p4", 3, 	97,	3, 		2,  	"D-8 D-9", "R-9 R-10");
+				Process p5 = new Process(5,"p5", 1, 	42,	6, 		9,  	"D-1 D-2", "R-1 R-2");
 
 				queue.addProcess(p1);
 				queue.addProcess(p2);
@@ -68,6 +63,7 @@ public class Simulator implements Runnable {
 				int moreDeviceFlag = 1;
 				int moreResourceFlag = 1;
 				String name;
+				int size;
 				int pid;
 				int prio;
 				int subtime;
@@ -81,6 +77,8 @@ public class Simulator implements Runnable {
 					pid = reader.nextInt();
 					System.out.println("Please enter an integer priority > 0");
 					prio = reader.nextInt();
+					System.out.println("Please enter an integer number of RAM pages required > 0");
+					size = reader.nextInt();
 					System.out.println("Please enter an integer submit time > 0");
 					subtime = reader.nextInt();
 					System.out.println("Please enter an integer number of bursts > 0");
@@ -100,7 +98,7 @@ public class Simulator implements Runnable {
 						moreResourceFlag = reader.nextInt();
 						
 					}
-					Process pTemp = new Process (pid, name, prio, subtime, bursts, devices, resources);
+					Process pTemp = new Process (pid, name, prio, size, subtime, bursts, devices, resources);
 					queue.addProcess(pTemp);
 					//add process
 					System.out.println("Process Added");
@@ -109,7 +107,7 @@ public class Simulator implements Runnable {
 				}
 				break;
 			case 3:
-				//run da program
+				//run simulation
 				while (!queue.isFinished()){
 					System.out.println(queue.toString());
 					queue.update();
@@ -122,8 +120,16 @@ public class Simulator implements Runnable {
 					
 					}
 				}
-				System.out.println("Simulation Done!");
 				System.out.println(queue.toString());
+				double avgWaitTime = 0.0;
+				int numOfProcs = 0;
+				for (Process p : queue.getTerminateQueue()){
+					avgWaitTime += p.getWaitTime();
+					numOfProcs++;
+				}
+				avgWaitTime /= numOfProcs;
+				System.out.println("Average Wait Time: " + avgWaitTime);
+				System.out.println("Simulation Done!");
 				break;
 			case 4:
 				//change scheduling
@@ -143,6 +149,7 @@ public class Simulator implements Runnable {
 			case 7:
 				queue.emptyQueues();
 			default:
+				System.out.println("Goodbye!");
 				break;
 			}
 		}

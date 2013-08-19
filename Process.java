@@ -13,6 +13,7 @@ public class Process{
 	private int pid;								//unique id of the current process
 	private String name;							//name of the current process
 	private int priority;							//the priority of the current process (higher value -> higher priority)
+	private int sizeInRAM;							//number of pages required by process
 	private int submitTime;
 	private int burstCycles;
 	private String[] requiredDevices;				//list of devices required by the current process
@@ -22,6 +23,9 @@ public class Process{
 	private String state;							//current state of the current process
 	private static int maxPid = 1;
 	private boolean[] flag;
+	private int[] ramOwned;
+	private int finishTime;
+	
 
 	/** 
 	 * Constructs a process
@@ -33,10 +37,11 @@ public class Process{
 	 * @param periodic	true means endless process that repeats burst cycle indefinitely, otherwise	only once
 	 * @param burstsCycle process bursts vector. CPU or I/O bursts, values 0 or 1  
 	 */
-	public Process(int pid, String name, int priority, int submitTime, int burstsCycle, String requiredDevices, String requiredResources) {
+	public Process(int pid, String name, int priority, int size, int submitTime, int burstsCycle, String requiredDevices, String requiredResources) {
 		this.pid = pid;
 		this.name = name;
 		this.priority = priority;
+		this.sizeInRAM = size;
 		this.submitTime = submitTime;
 		this.burstCycles = burstsCycle;
 		this.requiredDevices = requiredDevices.trim().split(" ");
@@ -45,6 +50,14 @@ public class Process{
 		this.usedResources = new ArrayList<Resource>();
 		maxPid++;
 		flag = new boolean[pid];
+		ramOwned = new int[this.getSizeInRAM()];
+		for (int i = 0; i < this.getSizeInRAM(); i++)
+			ramOwned[i] = Machine.getInstance().requestRAMPage();
+	}
+	
+	//Returns number of pages needed for process
+	public int getSizeInRAM (){
+		return this.sizeInRAM;
 	}
 	
 	//Returns the current process id
@@ -110,6 +123,11 @@ public class Process{
 	//Returns the unique process identifier
 	public static int getMaxPid() {
 		return maxPid;
+	}
+	
+	//Sets size in Ram
+	public void setSizeInRAM (int size){
+		this.sizeInRAM = size;
 	}
 	
 	//Determines if the passed device is required by this process
@@ -337,6 +355,24 @@ public class Process{
 	    
 	    flag[pid] = false;
 		
+	}
+	
+	public void removeAllPages(){
+		for (int i : ramOwned){
+			Machine.getInstance().freeRAMPage(i);
+		}
+	}
+
+	public int getFinishTime() {
+		return finishTime;
+	}
+
+	public void setFinishTime(int finishTime) {
+		this.finishTime = finishTime;
+	}
+	
+	public int getWaitTime (){
+		return this.getFinishTime() - this.getSubmitTime();
 	}
 	
 	

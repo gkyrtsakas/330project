@@ -82,7 +82,7 @@ public class QueueManager extends NonPreemptiveScheduler{
 		readyQueue = new LinkedList<Process>();
 		runQueue = new LinkedList<Process>();
 		waitQueue = new LinkedList<Process>();
-		terminateQueue = new LinkedList<Process>();
+		setTerminateQueue(new LinkedList<Process>());
 		cycleTime = 0;
 	}
 	
@@ -121,7 +121,10 @@ public class QueueManager extends NonPreemptiveScheduler{
 				if(runQueue.peek().getBurstsCycle() <= -1){
 					runQueue.peek().removeAllDevices();
 					runQueue.peek().removeAllResources();
-					terminateQueue = moveFromRunning(runQueue.poll(), terminateQueue);
+					runQueue.peek().removeAllPages();
+					runQueue.peek().setFinishTime(this.getCycleTime());
+					setTerminateQueue(moveFromRunning(runQueue.poll(), getTerminateQueue()));
+					
 				}
 			}
 		}
@@ -151,7 +154,7 @@ public class QueueManager extends NonPreemptiveScheduler{
 		returnString += "\n|----New----|---Ready---|--Running--|--Waiting--|-Terminated|";
 		int newSize = newQueue.size(), readySize = readyQueue.size(), 
 			runSize = runQueue.size(), waitSize = waitQueue.size(),
-			terminateSize = terminateQueue.size(), max;
+			terminateSize = getTerminateQueue().size(), max;
 		
 		List<Integer> findMax = Arrays.asList(newSize, readySize, runSize, waitSize, terminateSize);
 		
@@ -159,7 +162,7 @@ public class QueueManager extends NonPreemptiveScheduler{
 		
 		Process[] newArray = newQueue.toArray(new Process[newQueue.size()]), readyArray = readyQueue.toArray(new Process[readyQueue.size()]),
 				runArray = runQueue.toArray(new Process[runQueue.size()]), waitArray = waitQueue.toArray(new Process[waitQueue.size()]),
-				terminateArray = terminateQueue.toArray(new Process[terminateQueue.size()]);
+				terminateArray = getTerminateQueue().toArray(new Process[getTerminateQueue().size()]);
 		
 		for(int i=0; i < max; i++){
 			if(i < newSize){
@@ -213,5 +216,13 @@ public class QueueManager extends NonPreemptiveScheduler{
 							+ runS + "|" + waitS + "|" + termS + "|";
 		}
 		return returnString;
+	}
+
+	public static LinkedList<Process> getTerminateQueue() {
+		return terminateQueue;
+	}
+
+	public static void setTerminateQueue(LinkedList<Process> terminateQueue) {
+		QueueManager.terminateQueue = terminateQueue;
 	}
 }
