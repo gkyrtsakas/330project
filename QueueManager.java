@@ -17,6 +17,7 @@ public class QueueManager extends NonPreemptiveScheduler{
 	}
 	
 	public void addProcess(Process process){
+		System.out.println(process.getName());
 		moveToNew(process, newQueue);
 		moveFromNew();
 	}
@@ -72,8 +73,9 @@ public class QueueManager extends NonPreemptiveScheduler{
 	
 	public void moveFromNew(){
 		if (!newQueue.isEmpty()){
+			System.out.println(newQueue.toString());
 			while(newQueue.peek().getSubmitTime() < cycleTime){
-				readyQueue = moveFromNewToReady(newQueue.poll(), readyQueue);
+				readyQueue = moveFromNewToReady(newQueue.remove(0), readyQueue);
 			}
 		}
 	}
