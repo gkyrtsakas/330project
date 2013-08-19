@@ -42,7 +42,10 @@ public class Simulator implements Runnable {
 		int response = 1;
 		String input;
 		
+		System.out.println(queue.toString());
+		
 		while (response > 0){
+			
 			System.out.println("Welcome to the Scheduling Simulator");
 			System.out.println();
 			System.out.println("Select an option, then press Enter");

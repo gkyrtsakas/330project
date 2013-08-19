@@ -86,17 +86,20 @@ public class QueueManager extends NonPreemptiveScheduler{
 	}
 	
 	public void moveFromRun(){
-		if(!runQueue.isEmpty() && (runQueue.peek().getAllDevice().size() != runQueue.peek().getRequiredDevices().length
-				|| runQueue.peek().getAllResource().size() != runQueue.peek().getRequiredResources().length)){
-			runQueue.peek().setState("wait");
-			waitQueue = moveFromRunning(runQueue.poll(), waitQueue);
-		}
-		else{
-			runQueue.element().setBurstCycle(runQueue.element().getBurstsCycle()-1);
-			if(runQueue.peek().getBurstsCycle() <= 0){
-				terminateQueue = moveFromRunning(runQueue.poll(), terminateQueue);
+		if (!runQueue.isEmpty()){
+			if((runQueue.peek().getAllDevice().size() != runQueue.peek().getRequiredDevices().length
+					|| runQueue.peek().getAllResource().size() != runQueue.peek().getRequiredResources().length)){
+				runQueue.peek().setState("wait");
+				waitQueue = moveFromRunning(runQueue.poll(), waitQueue);
+			}
+			else{
+				runQueue.peek().setBurstCycle(runQueue.peek().getBurstsCycle()-1);
+				if(runQueue.peek().getBurstsCycle() <= 0){
+					terminateQueue = moveFromRunning(runQueue.poll(), terminateQueue);
+				}
 			}
 		}
+		
 	}
 	
 	public void moveFromWait(){
