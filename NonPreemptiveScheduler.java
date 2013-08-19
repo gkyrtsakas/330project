@@ -16,6 +16,11 @@ public class NonPreemptiveScheduler
 			scheduleType = type;
 	}
 	
+	public void setScheduler(int scheduleType)
+	{
+		this.scheduleType = scheduleType;
+	}
+	
 	//Function to return the type of scheduling currently in use.
 	public int getScheduler()
 	{
@@ -47,6 +52,9 @@ public class NonPreemptiveScheduler
 			//add it to the end.
 			queue.add(process);
 		}
+		
+		//Finally, update the process object to signify it is in the right state.
+		process.setState("new");
 		
 		return queue;
 	}

@@ -73,6 +73,33 @@ public class Process{
 		this.burstCycles = burst;
 	}
 	
+	public void setState(String pState)
+	{
+		//Changes process state based on where it has been moved to.
+		if (pState.equals(PROCESS_STATE_NEW))
+		{
+			this.state = PROCESS_STATE_NEW;
+		}
+		else if (pState.equals(PROCESS_STATE_READY))
+		{
+			this.state = PROCESS_STATE_READY;
+		}
+		else if (pState.equals(PROCESS_STATE_RUNNING))
+		{
+			this.state = PROCESS_STATE_RUNNING;
+		}
+		else if (pState.equals(PROCESS_STATE_WAITING))
+		{
+			this.state = PROCESS_STATE_WAITING;
+		}
+		else if (pState.equals(PROCESS_STATE_TERMINATED))
+		{
+			this.state = PROCESS_STATE_TERMINATED;
+		}
+		
+		//If it does not match a clause above, then leave state unmodified
+	}
+	
 	//Returns the current process state
 	public String getState(){
 		return this.state;

@@ -1,12 +1,16 @@
 import java.util.*; 
 
+/* The QueueManager Class handles the management of the process state queues.
+ * It extends the NonPreemptiveScheduler class in order to properly manage the processes within each queue.
+ */
 public class QueueManager extends NonPreemptiveScheduler{
+	//The five default queues, one for each process state.
 	private static LinkedList<Process> newQueue = new LinkedList<Process>();
 	private static LinkedList<Process> readyQueue = new LinkedList<Process>();
 	private static LinkedList<Process> runQueue = new LinkedList<Process>();
 	private static LinkedList<Process> waitQueue = new LinkedList<Process>();
 	private static LinkedList<Process> terminateQueue = new LinkedList<Process>();
-	private static int cycleTime = 0;
+	private static int cycleTime = 0;			//Keeps track of which cycle it is currently working in, in order to manage processes
 	
 	QueueManager(int schedulingType){	
 		super(schedulingType);
