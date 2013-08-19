@@ -17,16 +17,24 @@ public class QueueManager extends NonPreemptiveScheduler{
 	}
 	
 	public void addProcess(Process process){
-		System.out.println(process.getName());
 		moveToNew(process, newQueue);
 		moveFromNew();
 	}
 	
 	public void update(){
-		moveFromNew();
-		moveFromRun();
-		moveFromWait();
-		moveFromReady();
+		if(!newQueue.isEmpty())
+			moveFromNew();
+		if(!runQueue.isEmpty())
+			moveFromRun();
+		if(!waitQueue.isEmpty())
+			moveFromWait();
+		if(!readyQueue.isEmpty())
+			moveFromReady();
+	}
+	
+	public int getCycleTime()
+	{
+		return cycleTime;
 	}
 	
 	public boolean isFinished()
@@ -73,13 +81,14 @@ public class QueueManager extends NonPreemptiveScheduler{
 	
 	public void moveFromNew(){
 		if (!newQueue.isEmpty()){
-			System.out.println(newQueue.toString());
-			while(newQueue.peek().getSubmitTime() < cycleTime){
-				readyQueue = moveFromNewToReady(newQueue.remove(0), readyQueue);
+			if(newQueue.peek().getSubmitTime() <= cycleTime){
+				readyQueue = moveFromNewToReady(newQueue.poll(), readyQueue);
+				moveFromNew();
 			}
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void moveFromReady(){
 		while(runQueue.isEmpty() && !readyQueue.isEmpty()){
 			runQueue = moveFromReadyToRunning(readyQueue.poll(), runQueue);

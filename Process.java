@@ -41,6 +41,8 @@ public class Process{
 		this.burstCycles = burstsCycle;
 		this.requiredDevices = requiredDevices.split(" ");
 		this.requiredResources = requiredResources.split(" ");
+		this.usedDevices = new ArrayList<Device>();
+		this.usedResources = new ArrayList<Resource>();
 		maxPid++;
 		flag = new boolean[pid];
 	}
