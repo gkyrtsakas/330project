@@ -29,7 +29,7 @@ public class Simulator implements Runnable {
 		Process p1 = new Process(1,"p1", 1, 	0, 		6, 	"D-1 D-2", "R-1 R-3");
 		Process p2 = new Process(2,"p2", 2, 	3, 		1,  "D-4 D-2", "R-2 R-5");
 		Process p3 = new Process(3,"p3", 1, 	7, 		3,  "D-1 D-2", "R-1 R-3");
-		Process p4 = new Process(4,"p4", 3, 	4, 		2,  "D-8 D-9", "R-2 R-4");
+		Process p4 = new Process(4,"p4", 3, 	4, 		2,  "D-8 D-9", "R-9 R-10");
 		Process p5 = new Process(5,"p5", 1, 	6, 		9,  "D-1 D-2", "R-1 R-2");
 		
 		queue.addProcess(p1);
@@ -96,11 +96,10 @@ public class Simulator implements Runnable {
 			case 3:
 				//run da program
 				while (!queue.isFinished()){
-					queue.cycleIncrement();
-					System.out.println(queue.getCycleTime());
 					System.out.println(queue.toString());
 					queue.update();
 					queue.toString();
+					queue.cycleIncrement();
 					try {
 						Thread.sleep(1000);
 					} catch(InterruptedException ex) {

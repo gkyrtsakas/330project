@@ -1,4 +1,5 @@
 import java.util.*; 
+import java.util.LinkedList; 
 
 /* The QueueManager Class handles the management of the process state queues.
  * It extends the NonPreemptiveScheduler class in order to properly manage the processes within each queue.
@@ -105,7 +106,9 @@ public class QueueManager extends NonPreemptiveScheduler{
 			}
 			else{
 				runQueue.peek().setBurstCycle(runQueue.peek().getBurstsCycle()-1);
-				if(runQueue.peek().getBurstsCycle() <= 0){
+				if(runQueue.peek().getBurstsCycle() <= -1){
+					runQueue.peek().removeAllDevices();
+					runQueue.peek().removeAllResources();
 					terminateQueue = moveFromRunning(runQueue.poll(), terminateQueue);
 				}
 			}
