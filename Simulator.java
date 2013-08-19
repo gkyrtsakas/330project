@@ -49,9 +49,8 @@ public class Simulator implements Runnable {
 			System.out.println("0. Exit");
 			System.out.println("1. Use Default Set of Processes");
 			System.out.println("2. Add Process");
-			System.out.println("3. Add I/O Device");
-			System.out.println("4. Run Simulator");
-			System.out.println("5. Change Scheduling Type");
+			System.out.println("3. Run Simulator");
+			System.out.println("4. Change Scheduling Type");
 			
 			@SuppressWarnings("resource")
 			Scanner reader = new Scanner(System.in);
@@ -62,30 +61,60 @@ public class Simulator implements Runnable {
 				System.out.println("Done...");
 				break;
 			case 2:
-				//add process
-				System.out.println("Process Added");
+				int flag = 1;
+				String name;
+				int pid;
+				int prio;
+				int subtime;
+				int bursts;
+				String devices;
+				String resources;
+				while (flag == 1){
+					System.out.println("Please enter a name for the process");
+					name = reader.next();
+					System.out.println("Please enter an integer pid");
+					pid = reader.nextInt();
+					System.out.println("Please enter an integer priority > 0");
+					prio = reader.nextInt();
+					System.out.println("Please enter an integer submit time > 0");
+					subtime = reader.nextInt();
+					System.out.println("Please enter an integer number of bursts > 0");
+					bursts = reader.nextInt();
+					System.out.println("Please enter required devices in the format \"D-x D-y\", where x and y are integers");
+					devices = reader.next();
+					System.out.println("Please enter required resources in the format \"R-x R-y\", where x and y are integers");
+					resources = reader.next();
+					Process pTemp = new Process (pid, name, prio, subtime, bursts, devices, resources);
+					queue.addProcess(pTemp);
+					//add process
+					System.out.println("Process Added");
+					System.out.println("Enter 1 to add another process, 0 to return to main menu");
+					flag = reader.nextInt();
+				}
 				break;
 			case 3:
-				System.out.println("Please Enter a Name for the Device");
-				input = reader.next();
-				new Resource(input);
-				System.out.println("Resource Added...");
-				break;
-			case 4:
-				while (true){
+				//run da program
+				while (!queue.isFinished()){
 					queue.update();
 					queue.toString();
 					queue.cycleIncrement();
 				}
+				System.out.println("Simulation Done!");
 				break;
-			case 5:
+			case 4:
 				//change scheduling
+				System.out.println("Pick one of the following option:");
+				System.out.println("1. First-Come First-Serve");
+				System.out.println("2. Shortest Job First");
+				System.out.println("3. Priotiry Scheduling");
+				queue.setScheduler(reader.nextInt());
+				System.out.println("Scheduler Changed!");
 				break;
 			default:
 				break;
 			}
 			try {
-				Thread.sleep(1500);
+				Thread.sleep(1000);
 			} catch(InterruptedException ex) {
 			    Thread.currentThread().interrupt();
 			
